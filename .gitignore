@@ -86,3 +86,16 @@ hpc_related_files/
 
 # Large model files that exceed GitHub limits
 data/cached/models--distilbert-base-uncased-finetuned-sst-2-english/blobs/7c3919835e442510166d267fe7cbe847e0c51cd26d9ba07b89a57b952b49b8aa
+
+# Preparation scripts (not needed in final repo)
+clean_cursor_references.sh
+clean_for_github.sh
+clean_kaggle_focus.sh
+distilbert_kaggle_notebook.ipynb
+github_files.txt
+init_github_repo.sh
+organize_codebase.sh
+organize_for_github.sh
+run_distilbert_on_kaggle.py
+filter_large_files.sh
+clean_git_history.sh
