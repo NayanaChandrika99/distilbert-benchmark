@@ -80,3 +80,6 @@ temp/
 
 # HPC related files (not used in final deployment)
 hpc_related_files/
+
+# Large model files that exceed GitHub limits
+data/cached/models--distilbert-base-uncased-finetuned-sst-2-english/blobs/7c3919835e442510166d267fe7cbe847e0c51cd26d9ba07b89a57b952b49b8aa
