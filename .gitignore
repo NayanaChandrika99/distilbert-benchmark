@@ -46,6 +46,9 @@ __pycache__/
 # Cache directories
 cache/
 data/cached/
+# Exclude all cached model files
+data/cached/**/*
+!data/cached/.gitkeep
 **/model_cache/
 **/cached/
 **/*.safetensors
