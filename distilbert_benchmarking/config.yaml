@@ -1,0 +1,65 @@
+# DistilBERT Benchmarking Configuration
+
+# Model Configuration
+model:
+  name: "distilbert-base-uncased-finetuned-sst-2-english"
+  task: "sequence-classification"
+  max_length: 128
+
+# Dataset Configuration
+dataset:
+  name: "glue"
+  subset: "sst2"
+  split: "validation"
+  cache_dir: "./data/cached"
+
+# Benchmark Configuration
+benchmark:
+  # Devices to benchmark on
+  devices:
+    - "cpu"
+    - "cuda:0"  # First CUDA device if available
+
+  # Batch sizes to test
+  batch_sizes: [1, 2, 4, 8, 16, 32, 64, 128]
+
+  # Number of warmup runs before measuring
+  warmup_runs: 5
+
+  # Number of iterations to average metrics over
+  iterations: 20
+
+  # Metrics to collect
+  metrics:
+    latency: true
+    throughput: true
+    cpu_memory: true
+    gpu_memory: true
+    energy: true
+
+  # Output settings
+  output:
+    format: "json"
+    include_system_info: true
+
+# SLURM Configuration
+slurm:
+  partition: "gpu"
+  time: "01:00:00"  # 1 hour
+  cpus_per_task: 4
+  mem: "16G"
+  gpus: 1
+  nodes: 1
+
+# Visualization Settings
+visualization:
+  theme: "seaborn-v0_8-whitegrid"
+  figsize: [10, 6]
+  dpi: 300
+  formats: ["png", "pdf"]
+
+# Reporting Settings
+report:
+  title: "DistilBERT Benchmark Report"
+  author: "Benchmark Suite"
+  date: "auto"  # Will be filled with current date

@@ -1,0 +1,11 @@
+device,batch_size,mixed_precision,avg_latency_ms,avg_throughput,avg_memory_usage_mb,per_sample_time_ms,memory_per_sample_mb,parallelism_efficiency,compute_overhead_ratio,overhead_percentage
+cuda,8,True,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cuda,16,True,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cuda,32,True,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cpu,8,False,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cpu,16,False,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cuda,8,False,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cuda,16,False,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cuda,32,False,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cuda,64,False,0.0,0.0,0.0,0.0,0,0,1.0,0.0
+cuda,128,False,0.0,0.0,0.0,0.0,0,0,1.0,0.0

@@ -1,0 +1,125 @@
+
+Product Requirements Document (PRD)
+===================================
+
+<context>
+# Overview
+This project delivers an **Automated DistilBERT Benchmarking Suite** that measures inference latency, memory footprint, and energy consumption for sequence‑classification on CPU and GPU inside an HPC cluster.
+It solves the pain of ad‑hoc, non‑reproducible model benchmarks by giving ML researchers and infrastructure teams a turn‑key toolchain that produces auditable metrics, plots, and a publication‑ready report.
+
+# Core Features
+1. **Dataset Ingestion & Tokenisation**
+   - *What*: One‑command download of GLUE/SST‑2 validation data plus batched tokenisation.
+   - *Why*: Ensures reproducible, licence‑compliant input for every run.
+   - *How*: Python scripts using 🤗 `datasets` and `DistilBertTokenizerFast`; hash check stored in manifest.
+
+2. **Device‑Agnostic Model Loader**
+   - *What*: Loads `DistilBertForSequenceClassification` on CPU or any visible CUDA device.
+   - *Why*: Allows head‑to‑head benchmarking under identical software versions.
+   - *How*: Factory function `load_model(device:str)` with Torch compile‑time flags.
+
+3. **Metric Collectors**
+   - *What*: Wall‑clock latency, throughput, peak memory (CPU/GPU), and energy per sample.
+   - *Why*: Provides multidimensional view of cost vs. performance.
+   - *How*: `time.perf_counter()`, `torch.cuda.Event`, `psutil`, `pynvml`, `pyRAPL`.
+
+4. **Batch‑Sweep Runner**
+   - *What*: Iterates over configurable batch sizes; dumps one JSON line per run.
+   - *Why*: Surfaces scaling behaviour and GPU/CPU crossover points.
+   - *How*: Orchestrator `runner.py` driven by YAML config; schemas enforced with `pydantic`.
+
+5. **HPC / SLURM Integration**
+   - *What*: Ready‑made `bench_distilbert.slurm` template.
+   - *Why*: Enables reproducible cluster executions and queue automation.
+   - *How*: Parameterised SBATCH flags, module loads, and rsync of result artefacts.
+
+6. **Analytics & Visualisation**
+   - *What*: Scripts generating latency/throughput/memory/energy plots plus Jinja‑rendered insights markdown.
+   - *Why*: Converts raw logs into decision‑making artefacts for hardware selection.
+   - *How*: Pandas + matplotlib; templated summary.
+
+7. **Reporting Pipeline**
+   - *What*: Pandoc‑powered PDF and PowerPoint slide deck.
+   - *Why*: Academic‑ready deliverables without manual copy‑paste.
+   - *How*: `make report` target stitches markdown, plots, and bib references.
+
+# User Experience
+- **Personas**
+  * ML Graduate Student: needs quick, defensible metrics for a paper or coursework.
+  * HPC Engineer: validates GPU utilisation and plans capacity.
+- **Key User Flows**
+  1. Clone repo → `conda env create -f environment.yml` → `make smoke` to validate local setup.
+  2. Edit `config.yaml` for desired batch sizes → `make benchmark` (local) or `sbatch bench_distilbert.slurm`.
+  3. Retrieve `results-*.json` → `make analyse` → open generated `figures/*.png` and `insights.md`.
+  4. `make release` builds `report.pdf` + `slides.pptx`.
+- **UI/UX Considerations**
+  * CLI with clear help (`--help`) and coloured logging.
+  * Result artefacts saved under timestamped directory to avoid collisions.
+</context>
+
+<PRD>
+# Technical Architecture
+- **System Components**
+  * `data/` – download & tokenise
+  * `src/model.py` – model loader
+  * `src/metrics/` – latency, memory, energy collectors
+  * `src/runner.py` – benchmark orchestrator
+  * `cluster/bench_distilbert.slurm` – SLURM wrapper
+  * `analysis/` – Jupyter‑less analysis scripts
+- **Data Models**
+  * JSON line per run: `{"device": "...", "batch_size": 8, "latency_ms": ..., "energy_J": ...}`
+  * Validation schemas via `pydantic.BaseModel`.
+- **APIs & Integrations**
+  * Hugging Face Hub for model & tokenizer downloads.
+  * NVML API for GPU power, memory.
+  * pyRAPL for Intel/AMD RAPL counters.
+- **Infrastructure Requirements**
+  * Local: Python 3.10+, Conda or Mamba, ≥ 8 GB RAM.
+  * Cluster: SLURM 21+, CUDA 11.8+, NVML read access, outbound internet or pre‑cached model.
+
+# Development Roadmap
+**Phase A – MVP**
+  * Dataset ingest & hash check
+  * CPU benchmarking at batch sizes {1, 8, 32}
+  * JSON result dump, no plots
+  * Smoke tests in CI
+
+**Phase B – GPU Support & Metrics**
+  * CUDA device loader
+  * GPU latency/memory/energy collectors
+  * Batch sweep CLI, structured logging
+  * Integration tests
+
+**Phase C – HPC & Visuals**
+  * SLURM script template
+  * Automated rsync of artefacts
+  * Pandas aggregation + four matplotlib plots
+  * Insights markdown
+
+**Phase D – Reporting & Polish**
+  * PDF report via Pandoc
+  * 12‑slide PowerPoint deck
+  * Pre‑commit hooks, 90 % test coverage
+  * GitHub Release assets + SHA256 manifest
+
+# Logical Dependency Chain
+1. Foundation: data ingest ➔ tokenisation ➔ CPU model load ➔ latency metric.
+2. Visible MVP: CLI smoke run outputs first JSON & passes unit tests.
+3. Extend: add GPU path & advanced metrics (memory, energy).
+4. HPC wrapper once local path stable.
+5. Analysis & plotting dependent on JSON schema frozen.
+6. Reporting after stable analytics.
+
+# Risks and Mitigations
+| Risk | Mitigation |
+|------|------------|
+| NVML or RAPL not accessible on cluster | Provide fallback: average power × duration; document deviation. |
+| Hugging Face model download fails (firewall) | Allow offline cache directory; include model artefact checksum. |
+| Scope creep in visualisation | Freeze JSON schema early and limit plot count to four. |
+| Data drift in SST‑2 | Pin GLUE dataset version and hash‑check nightly. |
+
+# Appendix
+- GLUE SST‑2 licence (MIT) and citation string.
+- Cluster spec sheet (AMD EPYC Milan 7643, NVIDIA A100 80 GB, SLURM 21.08).
+- Example result JSON and plot thumbnails.
+</PRD>

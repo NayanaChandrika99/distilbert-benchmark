@@ -1,0 +1,37 @@
+# Core Implementation Files
+src/
+tests/
+
+# Configuration Files
+config/config.yaml
+config/environment.yml
+config/.pre-commit-config.yaml
+config/mypy.ini
+config/README.md
+
+# Documentation
+README.md
+docs/KAGGLE_INSTRUCTIONS.md
+
+# Example Files
+examples/benchmark_demo.ipynb
+
+# Build and Run Scripts
+Makefile
+
+# Kaggle Integration (Primary Deployment Platform)
+kaggle/README.md
+kaggle/run_distilbert_on_kaggle.py
+kaggle/distilbert_kaggle_notebook.ipynb
+kaggle_download_notebook.ipynb
+
+# Results Structure (empty directories for git)
+results/.gitkeep
+
+# Utility Scripts (clean of Cursor references)
+scripts/list_components.sh
+scripts/profile_batch_sizes.py
+scripts/run_benchmark.sh
+
+# Git Configuration
+.gitignore 

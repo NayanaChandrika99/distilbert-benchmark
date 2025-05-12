@@ -1,0 +1,82 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS specific
+.DS_Store
+
+# Task files
+tasks.json
+tasks/
+
+# Archive files
+archive/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+
+# Benchmark results
+*.jsonl
+!cluster/examples/*.jsonl
+!examples/*.jsonl
+
+# Cache directories
+cache/
+data/cached/
+**/model_cache/
+**/cached/
+**/*.safetensors
+**/*.arrow
+
+# Cursor specific files
+.cursor/
+.cursorrules
+.windsurfrules
+logs/cursor_edits.log
+
+# Large files
+*.tar.gz
+*.zip
+*.gz
+*.safetensors
+
+# Backup files
+*.bak
+*~
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Model files
+**/models--*/
+**/*model.safetensors
+
+# Temporary files
+tmp/
+temp/
+
+# HPC related files (not used in final deployment)
+hpc_related_files/

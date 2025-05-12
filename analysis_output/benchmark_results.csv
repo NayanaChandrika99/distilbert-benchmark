@@ -1,0 +1,12 @@
+timestamp,device,batch_size,model,mixed_precision,latency_ms,throughput,cpu_memory_mb,gpu_memory_mb,energy_joules,forward_time_ms,backward_time_ms,per_sample_time_ms,memory_per_sample_mb,overhead_percentage
+2025-05-06T15:00:56.641796,cuda,8,distilbert-base-uncased-finetuned-sst-2-english,True,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T15:00:57.693765,cuda,16,distilbert-base-uncased-finetuned-sst-2-english,True,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T15:00:59.741069,cuda,32,distilbert-base-uncased-finetuned-sst-2-english,True,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:58:45.674334,cpu,8,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:59:14.466126,cpu,16,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:57:40.190555,cuda,8,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:57:41.247761,cuda,16,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:57:43.297219,cuda,32,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:57:47.638352,cuda,64,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:57:56.382642,cuda,128,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0
+2025-05-06T14:55:03.460491,cuda,8,distilbert-base-uncased-finetuned-sst-2-english,False,0,0,0,0,0,0,0,0.0,0,0

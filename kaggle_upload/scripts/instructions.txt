@@ -1,0 +1,104 @@
+
+Expanded DistilBERT Benchmarking Project Plan
+=============================================
+
+1. Executive Summary
+--------------------
+Objective           : Build a fully-automated, repeatable benchmark that compares DistilBERT sequence-classification inference on CPU vs. GPU inside the university HPC cluster (AMD Milan + NVIDIA A100).
+Key metrics         : Latency (ms/batch & throughput), peak memory (CPU RSS / GPU allocated), energy per sample (J or Wh).
+Success             : A single `make benchmark` (locally) or `sbatch bench_distilbert.slurm` (cluster) runs end-to-end and produces: `results-<timestamp>.json`, four PNG plots, a 10-page PDF report, and a 12-slide deck.
+
+2. Work‑Breakdown Structure (WBS)
+---------------------------------
+Legend: 💻 = code, 🧪 = test, ⚙️ = CI, 📄 = docs, 🔄 = refactor window
+
+Phase 0 – Governance & Preparation
+  0.1 Draft Project Charter & repository README ............... 📄
+      Deliverable: README.md with scope, goals, cluster spec, dataset licence
+  0.2 Create repo, enable branch protection, project board .... 🔄
+
+Phase 1 – Environment & Toolchain
+  1.1 Conda env `distilbert_bench` (Python 3.10) .............. 💻🧪
+      Test: pytest tests/test_env.py passes (imports all libs)
+  1.2 IDE: create Cursor project, add .gitignore, .cursorules . 💻
+  1.3 CI pipeline (GitHub Actions) ............................ ⚙️
+
+Phase 2 – Data & Tokenization
+  2.1 fetch_sst2.py downloads validation split ................ 💻🧪
+      Test: record count, MD5 hash stored
+  2.2 tokenize.py exposing prepare_inputs() ................... 💻🧪
+  2.3 Data‑contract test (nightly CI cron) .................... ⚙️
+
+Phase 3 – Model Loader & Smoke Passes
+  3.1 model.py load_model(device) ............................. 💻🧪
+  3.2 CUDA warm‑up util ....................................... 💻
+
+Phase 4 – Benchmarking Harness
+  4.1 latency.py (CPU/GPU timers) ............................. 💻🧪
+  4.2 memory.py (psutil / pynvml) ............................. 💻🧪
+  4.3 energy.py (pyRAPL & NVML) ............................... 💻🧪
+  4.4 runner.py loops over devices × batch_sizes .............. 💻🧪
+
+Phase 5 – HPC Integration
+  5.1 bench_distilbert.slurm template ........................ 💻🧪
+  5.2 Cluster dry‑run, JSON retrieval ......................... 💻🧪
+
+Phase 6 – Continuous Refactoring & Logging (parallel)
+  • Structured logging (loguru) .............. JSON log per run
+  • Auto‑formatter (ruff + black) pre‑commit .. PR fails on style
+  • Refactor windows .......................... test coverage ≥ 90 %
+  • Code‑climate complexity reports (optional) .................
+
+Phase 7 – Analysis & Visualisation
+  7.1 analysis.py load JSON → pandas ......................... 💻🧪
+  7.2 Plot scripts produce 4 PNGs ............................ 💻🧪
+  7.3 insights.md auto‑generated (jinja2) .................... 💻🧪
+
+Phase 8 – Reporting & Artefacts
+  8.1 report.md → PDF via Pandoc ............................. 📄
+  8.2 slides/distilbert_bench.pptx (12 slides) ............... 📄
+  8.3 Release assets + SHA256 manifest ....................... 🔄
+
+3. Testing Strategy
+-------------------
+Level       Purpose                                 Tools
+Unit        Validate pure functions                 pytest, pytest‑benchmark
+Integration Tokenization → Model → Metrics          tests/integration
+System      SLURM job produces valid JSON           Golden‑file comparison
+Smoke       5‑sample end‑to‑end run on laptop       make smoke
+Regression  CI matrix (Py3.10/3.11, CUDA 11.8/12.1) GitHub Actions
+
+4. Risk Register
+----------------
+ID  Risk                               Likelihood  Impact  Mitigation
+R1  Cluster queue delays               Medium      High    Reserve GPU quota early; run CPU benchmarks first
+R2  Energy sensors unavailable         Low         Medium  Pre‑check NVML privileges; fallback estimate
+R3  Library updates break repro        Medium      Medium  Pin versions, archive wheelhouse
+R4  Data licence conflict              Low         High    GLUE MIT licence; cite source
+
+
+5. Cursor‑Specific Configuration
+--------------------------------
+.cursorules
+  - write tests first, then code
+  - run pytest automatically
+  - keep answers concise
+  - suggest alternatives
+  - avoid unnecessary explanations
+  - prioritize technical detail
+  - log every file change to logs/cursor_edits.log
+
+rules.mdc
+  ## Macro Prompts
+  1. chain_of_thought: Explain your reasoning before coding.
+  2. diagnose: Generate a diagnostic report of current repo state.
+
+7. Deliverables Checklist
+-------------------------
+[ ] environment.yml + requirements.txt
+[ ] src/ fully typed (mypy --strict)
+[ ] tests/ ≥ 90 % coverage
+[ ] cluster/bench_distilbert.slurm
+[ ] results/*.json, figures/*.png
+[ ] report.pdf (≤ 15 pages) + slides.pptx
+[ ] CHANGELOG.md and Git tag v1.0.0

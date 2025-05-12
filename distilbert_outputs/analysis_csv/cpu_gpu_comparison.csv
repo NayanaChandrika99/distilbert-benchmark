@@ -1,0 +1,2 @@
+batch_size,cpu_latency_ms,gpu_latency_ms,cpu_throughput_sps,gpu_throughput_sps,speedup_factor,latency_reduction
+8,449.57191330000796,16.096716000009792,17.8271824159166,497.9402426464505,27.93151665974292,0.9641954590048686
